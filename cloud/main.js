@@ -123,6 +123,30 @@ Parse.Cloud.define("generateSesatsAIUpdate", async (request) => {
   };
 });
 
+// Lets a user flag an AI Update as wrong, offensive, or otherwise problematic. Stored for
+// manual review rather than auto-actioned, since there's no moderation queue UI yet.
+Parse.Cloud.define("reportAIContent", async (request) => {
+  const questionId = requireString(request.params, "questionId");
+  const aiText = optionalString(request.params, "aiText").slice(0, 8000);
+  const comment = optionalString(request.params, "comment").slice(0, 2000);
+  const platform = optionalString(request.params, "platform");
+  const appVersion = optionalString(request.params, "appVersion");
+
+  const Report = Parse.Object.extend("AIContentReport");
+  const report = new Report();
+
+  report.set("questionId", questionId);
+  report.set("aiText", aiText);
+  report.set("comment", comment);
+  report.set("platform", platform);
+  report.set("appVersion", appVersion);
+  report.set("status", "open");
+
+  await report.save(null, { useMasterKey: true });
+
+  return { received: true };
+});
+
 async function getCachedInsight(questionId, promptVersion, model) {
   if (typeof questionId !== "string" || !questionId.trim()) {
     console.error("Invalid id:", questionId);
