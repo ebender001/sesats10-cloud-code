@@ -1,7 +1,7 @@
  async function callOpenAIResponse({
   apiKey,
   prompt,
-  model = process.env.OPENAI_MODEL || "gpt-4o",
+  model = process.env.OPENAI_MODEL || "gpt-6-luna",
   maxOutputTokens = 1200,
 }) {
   if (!apiKey) {

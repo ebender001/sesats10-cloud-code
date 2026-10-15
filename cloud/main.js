@@ -29,7 +29,7 @@ Parse.Cloud.define("generateSesatsAIUpdate", async (request) => {
     );
   }
 
-  const model = process.env.OPENAI_MODEL || "gpt-4o";
+  const model = process.env.OPENAI_MODEL || "gpt-6-luna";
 
   const questionId = requireString(request.params, "questionId");
   const questionText = requireString(request.params, "questionText");
